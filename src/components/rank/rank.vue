@@ -30,7 +30,6 @@
   // import {playlistMixin} from 'common/js/mixin'
   // import {mapMutations} from 'vuex'
 
-
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

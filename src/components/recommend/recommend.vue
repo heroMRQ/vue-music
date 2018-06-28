@@ -43,7 +43,6 @@
   // import {ERR_OK} from 'api/config'
   // import {mapMutations} from 'vuex'
 
-
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
