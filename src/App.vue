@@ -2,7 +2,9 @@
   <div id="app">
     <MHeader></MHeader>
     <tab></tab>
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -12,12 +14,11 @@
 export default {
     components: {
       MHeader,
-       Tab
+      Tab
     }
 }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import './common/stylus/variable'
-
 </style>
