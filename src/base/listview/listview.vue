@@ -9,7 +9,7 @@
       <li v-for="group in data" class="list-group">
         <h2 class="list-group-title">{{group.title}}</h2>
         <ul>
-          <li v-for="item in group.items" ref="listGroup" class="list-group-item">
+          <li v-for="item in group.items" @click="selectItem(item)" ref="listGroup" class="list-group-item">
             <img :src="item.avatar" class="avatar">
             <span class="name">{{item.name}}</span>
           </li>
@@ -26,9 +26,9 @@
         </li>
       </ul>
     </div>
-    <div class="list-fixed" v-show="fixedTitle">
-      <h1 class="fixed-title">{{fixedTitle}}</h1>
-    </div>
+    <!--<div class="list-fixed" v-show="fixedTitle">-->
+      <!--&lt;!&ndash;<h1 class="fixed-title">{{fixedTitle}}</h1>&ndash;&gt;-->
+    <!--</div>-->
   </Scroll>
 </template>
 
@@ -107,6 +107,9 @@
         let delta = (this.touch.y2 - this.touch.y1) / ANVHOR_HEIGHT | 0
         let anchorIndex = parseInt(this.touch.anchorIndex + delta)
         this._scrollTo(anchorIndex)
+      },
+      selectItem(item) {
+        this.$emit('select', item)
       },
       _scrollTo(index) {
         if (!index && index !== 0) {
