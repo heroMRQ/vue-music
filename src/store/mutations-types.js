@@ -1,1 +1,1 @@
-export const SET_SINGER = 'SET_SIGNER'
+export const SET_SINGER = 'SET_SINGER'

@@ -6,11 +6,44 @@
 
 <script type="text/ecmascript-6">
   // import MusicList from 'components/music-list/music-list'
-  // import {getSingerDetail} from 'api/singer'
-  // import {ERR_OK} from 'api/config'
-  // import {createSong} from 'common/js/song'
-  // import {mapGetters} from 'vuex'
+  import {getSingerDetail} from 'api/singer'
+  import {ERR_OK} from 'api/config'
+  import {createSong} from 'common/js/song'
+  import {mapGetters} from 'vuex'
 
+  export default {
+    computed: {
+      ...mapGetters([
+        'singer'
+      ])
+    },
+    created() {
+      this.getDetail()
+    },
+    methods: {
+      getDetail() {
+        if (!this.singer.id) {
+          this.$router.push('/singer')
+        }
+        getSingerDetail(this.singer.id).then(res => {
+          if (res.code === ERR_OK) {
+            this.songs = this._normalLizeSongs(res.data.list)
+            console.log(this.songs)
+          }
+        })
+      },
+      _normalLizeSongs(list) {
+        let ret = []
+        list.forEach(item => {
+          let {musicData} = item
+          if (musicData.songid && musicData.albummid) {
+            ret.push(createSong(musicData))
+          }
+        })
+        return ret
+      }
+    }
+  }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
