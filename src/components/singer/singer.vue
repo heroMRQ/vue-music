@@ -1,48 +1,46 @@
 <template>
-  <div class="singer">
-    <list-view :data="singers"></list-view>
+  <div class="singer" ref="singer">
+    <list-view :data="singers" @select="selectSinger"></list-view>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
   import ListView from 'base/listview/listview'
-  import {getSingerList} from 'api/singer'
-  import {ERR_OK} from 'api/config'
+  import { getSingerList } from 'api/singer'
+  import { ERR_OK } from 'api/config'
   import Singer from 'common/js/singer'
-  // import {mapMutations} from 'vuex'
+  import { mapMutations } from 'vuex'
   // import {playlistMixin} from 'common/js/mixin'
-
-  const HOT_NAME = '热'
-  const HOT_SINGER_LEN = 10
+  const HOT_WORD = '热'
+  const HOT_SINGER_LENGTH = 10
   export default {
-    data() {
+    data () {
       return {
         singers: []
       }
     },
-    created() {
+    created () {
       this._getSingerList()
     },
     methods: {
-      _getSingerList() {
-        getSingerList().then((res) => {
+      _getSingerList () {
+        getSingerList().then(res => {
           if (res.code === ERR_OK) {
-            this.singers = res.data.list
-            console.log(this._normalizeSinger(this.singers))
+            this.singers = this._dealSingerData(res.data.list)
           }
         })
       },
-      _normalizeSinger(list) {
+      _dealSingerData (data) {
         let map = {
-          title: HOT_NAME,
-          items: []
+          hot: {
+            title: HOT_WORD,
+            items: []
+          }
         }
-        list.forEach((item, index) => {
-          if (index < HOT_SINGER_LEN) {
-            map.items.push(new Singer({
-              name: item.Fsinger_name,
-              id: item.Fsinger_mid
-            }))
+        data.forEach((item, index) => {
+          if (index < HOT_SINGER_LENGTH) {
+            map.hot.items.push(new Singer({id: item.Fsinger_mid, name: item.Fsinger_name}))
           }
           const key = item.Findex
           if (!map[key]) {
@@ -52,21 +50,34 @@
             }
           }
           map[key].items.push(new Singer({
-            name: item.Fsinger_name,
-            id: item.Fsinger_mid
+            id: item.Fsinger_mid,
+            name: item.Fsinger_name
           }))
         })
-        console.log(map)
-        // let ret = []
-        // let hot = []
+        let hot = []
+        let ret = []
         for (let key in map) {
-          // if (key.match(/[a-zA-Z]/)) {
-          console.log(key)
-          console.log(map[key])
-          // }
+          let val = map[key]
+          if (val.title.match(/[a-zA-z]/)) {
+            ret.push(val)
+          } else if (val.title === HOT_WORD) {
+            hot.push(val)
+          }
         }
-        console.log(map)
-      }
+        ret.sort((a, b) => {
+          return a.title.charCodeAt(0) - b.title.charCodeAt(0)
+        })
+        return hot.concat(ret)
+      },
+      selectSinger (singer) {
+        this.$router.push({
+          path: `/singer/${singer.id}`
+        })
+        this.setSinger(singer)
+      },
+      ...mapMutations({
+        setSinger: 'SET_SINGER'
+      })
     },
     components: {
       ListView
