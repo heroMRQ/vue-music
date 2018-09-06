@@ -7,31 +7,31 @@
 
 <script>
   import ListView from 'base/listview/listview'
-  import {getSingerList} from 'api/singer'
-  import {ERR_OK} from 'api/config'
+  import { getSingerList } from 'api/singer'
+  import { ERR_OK } from 'api/config'
   import Singer from 'common/js/singer'
-  // import {mapMutations} from 'vuex'
+  import { mapMutations } from 'vuex'
   // import {playlistMixin} from 'common/js/mixin'
   const HOT_WORD = '热'
   const HOT_SINGER_LENGTH = 10
   export default {
-    data() {
+    data () {
       return {
         singers: []
       }
     },
-    created() {
+    created () {
       this._getSingerList()
     },
     methods: {
-      _getSingerList() {
+      _getSingerList () {
         getSingerList().then(res => {
           if (res.code === ERR_OK) {
             this.singers = this._dealSingerData(res.data.list)
           }
         })
       },
-      _dealSingerData(data) {
+      _dealSingerData (data) {
         let map = {
           hot: {
             title: HOT_WORD,
@@ -69,13 +69,15 @@
         })
         return hot.concat(ret)
       },
-      selectSinger(singer) {
-        console.log(singer.id)
+      selectSinger (singer) {
         this.$router.push({
           path: `/singer/${singer.id}`
         })
-        console.log(this.$router)
-      }
+        this.setSinger(singer)
+      },
+      ...mapMutations({
+        setSinger: 'SET_SINGER'
+      })
     },
     components: {
       ListView
