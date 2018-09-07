@@ -27,7 +27,7 @@
       </ul>
     </div>
     <!--<div class="list-fixed" v-show="fixedTitle">-->
-      <!--&lt;!&ndash;<h1 class="fixed-title">{{fixedTitle}}</h1>&ndash;&gt;-->
+    <!--&lt;!&ndash;<h1 class="fixed-title">{{fixedTitle}}</h1>&ndash;&gt;-->
     <!--</div>-->
   </Scroll>
 </template>
@@ -35,7 +35,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll'
   //  import Loading from 'base/loading/loading'
-  import {getData} from 'common/js/dom'
+  import { getData } from 'common/js/dom'
 
   const ANVHOR_HEIGHT = 18
   export default {
@@ -45,25 +45,25 @@
         default: []
       }
     },
-    created() {
+    created () {
       this.touch = {}
       this.listenScroll = true
       this.listHeight = []
       this.probeType = 3
     },
-    data() {
+    data () {
       return {
         scrollY: -1,
         currentIndex: 0
       }
     },
     watch: {
-      data() {
+      data () {
         setTimeout(() => {
           this._calculateHeight()
         }, 20)
       },
-      scrollY(newY) {
+      scrollY (newY) {
         const listHeight = this.listHeight
         if (newY > 0) {
           this.currentIndex = 0
@@ -79,7 +79,7 @@
         }
         this.currentIndex = listHeight.length - 2
       },
-      fixedTitle() {
+      fixedTitle () {
         if (this.scrollY > 0) {
           return ''
         }
@@ -87,31 +87,31 @@
       }
     },
     computed: {
-      shortcutList() {
+      shortcutList () {
         return this.data.map((group) => {
           return group.title.substr(0, 1)
         })
       }
     },
     methods: {
-      onShortcutTouchStart(e) {
+      onShortcutTouchStart (e) {
         let anchorIndex = getData(e.target, 'index')
         let firstTouch = e.touches[0]
         this.touch.anchorIndex = anchorIndex
         this.touch.y1 = firstTouch.pageY
         this._scrollTo(anchorIndex)
       },
-      onShortcutTouchMove(e) {
+      onShortcutTouchMove (e) {
         let firstTouch = e.touches[0]
         this.touch.y2 = firstTouch.pageY
         let delta = (this.touch.y2 - this.touch.y1) / ANVHOR_HEIGHT | 0
         let anchorIndex = parseInt(this.touch.anchorIndex + delta)
         this._scrollTo(anchorIndex)
       },
-      selectItem(item) {
+      selectItem (item) {
         this.$emit('select', item)
       },
-      _scrollTo(index) {
+      _scrollTo (index) {
         if (!index && index !== 0) {
           return
         }
@@ -123,11 +123,10 @@
         this.scrollY = -this.listHeight[index]
         this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0)
       },
-      scroll(pos) {
+      scroll (pos) {
         this.scrollY = pos.y
-        console.log(this.scrollY)
       },
-      _calculateHeight() {
+      _calculateHeight () {
         this.listHeight = []
         const list = this.$refs.listGroup
         let height = 0
