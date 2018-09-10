@@ -1,5 +1,5 @@
 <template>
-  <transition name="move" v-if="songs">
+  <transition name="move">
     <music-list :songs="songs" :title="title" :bg-image="bgImage"></music-list>
   </transition>
 </template>
@@ -22,6 +22,11 @@
       ...mapGetters([
         'singer'
       ])
+    },
+    data () {
+      return {
+        songs: []
+      }
     },
     created () {
       this.getDetail()

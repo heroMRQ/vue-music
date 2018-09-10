@@ -17,7 +17,8 @@
   export default {
     data () {
       return {
-        songs: []
+        songs: [],
+        singers: []
       }
     },
     created () {
