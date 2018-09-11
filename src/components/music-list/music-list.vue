@@ -4,16 +4,23 @@
       <i class="icon-back"></i>
     </div>
     <h1 class="title" v-html="title"></h1>
-    <div class="bg-image" :style="bgStyle">
+    <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="filter"></div>
     </div>
+    <div class="bg-layer" ref="layer"></div>
+    <scroll @scroll="scroll" :data="songs" class="list" :probe-type="probeType" :listen-scroll="listenScroll"
+            ref="list">
+      <div class="song-list-wrapper">
+        <song-list :songs="songs"></song-list>
+      </div>
+    </scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  // import Scroll from 'base/scroll/scroll'
+  import Scroll from 'base/scroll/scroll'
   // import Loading from 'base/loading/loading'
-  // import SongList from 'base/song-list/song-list'
+  import SongList from 'base/song-list/song-list'
   // import {prefixStyle} from 'common/js/dom'
   // import {playlistMixin} from 'common/js/mixin'
   // import {mapActions} from 'vuex'
@@ -32,10 +39,40 @@
         default: ''
       }
     },
+    data() {
+      return {
+        scrollY: 0
+      }
+    },
     computed: {
-      bgStyle () {
+      bgStyle() {
         return `background-image:url(${this.bgImage})`
       }
+    },
+    created() {
+      this.probeType = 3
+      this.listenScroll = true
+    },
+    mounted() {
+      this.imageHeight = this.$refs.bgImage.clientHeight
+      this.minTranslateY = -this.imageHeight
+      this.$refs.list.$el.style.top = `${this.imageHeight}px`
+    },
+    methods: {
+      scroll(pos) {
+        this.scrollY = pos.y
+      }
+    },
+    watch: {
+      scrollY(newY) {
+        let translateY = Math.max(this.minTranslateY, newY)
+        this.$refs.layer.style['transform'] = `translate3d(0, ${translateY}px, 0)`
+        this.$refs.layer.style['webkitTransform'] = `translate3d(0, ${translateY}px, 0)`
+      }
+    },
+    components: {
+      SongList,
+      Scroll
     }
   }
 </script>

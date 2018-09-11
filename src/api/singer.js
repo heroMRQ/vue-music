@@ -1,5 +1,5 @@
 import jsonp from 'common/js/jsonp'
-import { options } from './config'
+import {options} from './config'
 
 export function getSingerList() {
   const url = 'https://c.y.qq.com/v8/fcg-bin/v8.fcg'
@@ -43,6 +43,6 @@ export function getSingerDetail(singerId) {
     num: 200,
     songstatus: 1
   })
-
+  // http://dl.stream.qqmusic.qq.com/{filename}?vkey={vkey}&fromtag=66
   return jsonp(url, data, options)
 }

@@ -6,44 +6,43 @@
 
 <script type="text/ecmascript-6">
   import MusicList from 'components/music-list/music-list'
-  import { getSingerDetail } from 'api/singer'
-  import { ERR_OK } from 'api/config'
-  import { createSong } from 'common/js/song'
-  import { mapGetters } from 'vuex'
+  import {getSingerDetail} from 'api/singer'
+  import {ERR_OK} from 'api/config'
+  import {createSong} from 'common/js/song'
+  import {mapGetters} from 'vuex'
 
   export default {
     computed: {
-      title () {
+      title() {
         return this.singer.name
       },
-      bgImage () {
+      bgImage() {
         return this.singer.avatar
       },
       ...mapGetters([
         'singer'
       ])
     },
-    data () {
+    data() {
       return {
         songs: []
       }
     },
-    created () {
+    created() {
       this.getDetail()
     },
     methods: {
-      getDetail () {
+      getDetail() {
         if (!this.singer.id) {
           this.$router.push('/singer')
         }
         getSingerDetail(this.singer.id).then(res => {
           if (res.code === ERR_OK) {
             this.songs = this._normalLizeSongs(res.data.list)
-            console.log(this.songs)
           }
         })
       },
-      _normalLizeSongs (list) {
+      _normalLizeSongs(list) {
         let ret = []
         list.forEach(item => {
           let {musicData} = item
